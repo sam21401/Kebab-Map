@@ -28,7 +28,7 @@ class SuggestionFormFragment : Fragment() {
         val suggestion = binding.suggestionInput.text
         binding.submitButton.setOnClickListener {
             if (isLogged == true) {
-                if (!suggestion.isEmpty()) {
+                if (suggestion.isNullOrEmpty()) {
                     viewLifecycleOwner.lifecycleScope.launch {
                         sendSuggestion(suggestion.toString(), userService)
                     }

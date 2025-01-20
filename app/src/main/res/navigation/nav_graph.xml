@@ -53,6 +53,9 @@
     <fragment
         android:id="@+id/navigation_kebab_detail_page"
         android:name="com.example.kebabapp.KebabDetailPage">
+        <action
+            android:id="@+id/action_navigation_kebab_detail_page_to_navigation_list"
+            app:destination="@id/navigation_list" />
     </fragment>
     <fragment
         android:id="@+id/navigation_suggestion_form_page"
