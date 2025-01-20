@@ -23,7 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserFragment : Fragment() {
+class UserFragment : Fragment(), AdapterFavoritesClass.OnLogoClickListener {
     private lateinit var binding: FragmentUserPanelBinding
     private lateinit var kebabDetailPageViewModel: KebabDetailPageViewModel
 
@@ -118,7 +118,19 @@ class UserFragment : Fragment() {
 
     private fun getData() {
         val userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        val adapter = AdapterFavoritesClass(userViewModel.getFavKebabPlaces())
+        val adapter = AdapterFavoritesClass(userViewModel.getFavKebabPlaces(),this)
         binding.rvFavoriteKebabPlaces.adapter = adapter
+    }
+    override fun onLogoClick(itemId: Int) {
+        kebabDetailPageViewModel.setKebabId(itemId)
+        Log.i("ADAPTER", kebabDetailPageViewModel.getKebabId().toString())
+        val navController = this.findNavController()
+        val currentDestination = navController.currentDestination?.id
+        if (currentDestination == R.id.navigation_user) {
+            navController.navigate(R.id.action_navigation_user_to_navigation_kebab_detail_page)
+        } else {
+            Log.e("NavigationError", "Invalid navigation state " + navController.currentDestination?.id.toString())
+            navController.navigate(navController.currentDestination?.id!!)
+        }
     }
 }

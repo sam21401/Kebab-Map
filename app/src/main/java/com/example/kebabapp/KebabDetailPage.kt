@@ -50,7 +50,7 @@ class KebabDetailPage : Fragment() {
         }
         binding.btnBack.setOnClickListener{
             val navController = this.findNavController()
-            navController.navigate(R.id.action_navigation_kebab_detail_page_to_navigation_list)
+            navController.popBackStack()
         }
         if (isLogged == true) {
             viewLifecycleOwner.lifecycleScope.launch {

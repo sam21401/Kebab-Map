@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_navigation_user_to_navigation_user_logging"
             app:destination="@id/navigation_user_logging" />
+        <action
+            android:id="@+id/action_navigation_user_to_navigation_kebab_detail_page"
+            app:destination="@id/navigation_kebab_detail_page" />
     </fragment>
     <fragment
         android:id="@+id/navigation_user_logging"
@@ -56,6 +59,9 @@
         <action
             android:id="@+id/action_navigation_kebab_detail_page_to_navigation_list"
             app:destination="@id/navigation_list" />
+        <action
+            android:id="@+id/action_navigation_kebab_detail_page_to_navigation_user"
+            app:destination="@id/navigation_user" />
     </fragment>
     <fragment
         android:id="@+id/navigation_suggestion_form_page"
