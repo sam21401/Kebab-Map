@@ -44,7 +44,7 @@ class UserFragment : Fragment() {
         }
         if (!isLogged!!) {
             Log.i("TOKEN", "User is not logged")
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            viewLifecycleOwner.lifecycleScope.launch {
                 findNavController().navigate(R.id.action_navigation_user_to_navigation_user_logging)
             }
             return binding.root

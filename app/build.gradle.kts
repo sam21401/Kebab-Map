@@ -17,7 +17,7 @@ ktlint {
 android {
 
     namespace = "com.example.kebabapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.kebabapp"
@@ -88,11 +88,21 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.fragment.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation (libs.coroutines.test)
+    testImplementation(libs.androidx.test.rules)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
