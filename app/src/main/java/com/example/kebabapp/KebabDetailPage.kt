@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.kebabapp.databinding.KebabDetailPageBinding
 import com.example.kebabapp.utilities.KebabService
 import com.example.kebabapp.utilities.UserService
@@ -46,6 +47,10 @@ class KebabDetailPage : Fragment() {
             binding.stallIndicator.text = getYesNo(kebabDetailItem?.is_in_stall.toString())
             binding.orderingOptions.text = getStringFromTable(kebabDetailItem?.ordering_options)
             binding.openingHours.text = getOpeningHours(kebabOpeningHours)
+        }
+        binding.btnBack.setOnClickListener {
+            val navController = this.findNavController()
+            navController.popBackStack()
         }
         if (isLogged == true) {
             viewLifecycleOwner.lifecycleScope.launch {

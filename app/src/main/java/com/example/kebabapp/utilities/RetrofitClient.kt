@@ -34,6 +34,7 @@ object RetrofitClient {
                     "/api/kebab/favorites",
                     "/api/kebab/{id}/favdelete",
                     "/api/suggest/add",
+                    "/api/getSuggest",
                 )
 
             // Check if the URL matches any endpoint pattern

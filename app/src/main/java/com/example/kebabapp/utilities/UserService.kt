@@ -48,4 +48,7 @@ interface UserService {
     suspend fun sendSuggestion(
         @Query("subject") subject: String,
     ): Response<SuggestionResponse>
+
+    @GET("api/getSuggest")
+    suspend fun getUserSuggestions(): Response<UserSuggestionsResponse>
 }

@@ -224,7 +224,14 @@ class KebabListFragment : Fragment(), AdapterClass.OnLogoClickListener {
     override fun onLogoClick(itemId: Int) {
         kebabDetailPageViewModel.setKebabId(itemId)
         Log.i("ADAPTER", kebabDetailPageViewModel.getKebabId().toString())
-        findNavController().navigate(R.id.action_navigation_list_to_navigation_kebab_detail_page)
+        val navController = this.findNavController()
+        val currentDestination = navController.currentDestination?.id
+        if (currentDestination == R.id.navigation_list) {
+            navController.navigate(R.id.action_navigation_list_to_navigation_kebab_detail_page)
+        } else {
+            Log.e("NavigationError", "Invalid navigation state " + navController.currentDestination?.id.toString())
+            navController.navigate(navController.currentDestination?.id!!)
+        }
     }
 
     override fun onDestroyView() {

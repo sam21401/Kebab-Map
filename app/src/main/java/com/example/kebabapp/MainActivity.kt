@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 kebabPlaces.setKebabPlaces(data)
                 if (sharedPreferencesManager.checkStatus() == true) {
                     userViewModel.getFavKebabsFromApi(userService)
+                    userViewModel.getUserSuggestionsFromApi(userService)
                 }
             }
         }

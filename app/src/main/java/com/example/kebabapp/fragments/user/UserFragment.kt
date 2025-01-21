@@ -23,7 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserFragment : Fragment() {
+class UserFragment : Fragment(), AdapterFavoritesClass.OnLogoClickListener {
     private lateinit var binding: FragmentUserPanelBinding
     private lateinit var kebabDetailPageViewModel: KebabDetailPageViewModel
 
@@ -44,7 +44,9 @@ class UserFragment : Fragment() {
         }
         if (!isLogged!!) {
             Log.i("TOKEN", "User is not logged")
-            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            userViewModel.clearSuggestions()
+            userViewModel.clearFavKebabPlaces()
+            viewLifecycleOwner.lifecycleScope.launch {
                 findNavController().navigate(R.id.action_navigation_user_to_navigation_user_logging)
             }
             return binding.root
@@ -52,7 +54,9 @@ class UserFragment : Fragment() {
         if (isLogged == true && sharedPreferencesManager.getName().isNullOrEmpty()) {
             viewLifecycleOwner.lifecycleScope.launch {
                 userViewModel.getFavKebabsFromApi(userService)
+                userViewModel.getUserSuggestionsFromApi(userService)
                 val userName = getUserName(userService)
+                Log.i("SUGG", userViewModel.getUserSuggestions().toString())
                 if (!userName.isNullOrEmpty()) {
                     binding.tvUserLoggedName.text = userName
                     sharedPreferencesManager.saveName(userName)
@@ -64,15 +68,33 @@ class UserFragment : Fragment() {
         if (isLogged == true) {
             binding.rvFavoriteKebabPlaces.layoutManager = LinearLayoutManager(context)
             binding.rvFavoriteKebabPlaces.setHasFixedSize(true)
+            binding.rvSuggestions.layoutManager = LinearLayoutManager(context)
+            binding.rvSuggestions.setHasFixedSize(true)
             viewLifecycleOwner.lifecycleScope.launch {
+                userViewModel.getUserSuggestionsFromApi(userService)
                 userViewModel.getFavKebabsFromApi(userService)
                 getData()
             }
+        }
+        binding.buttonRefresh.setOnClickListener {
+            userViewModel.clearSuggestions()
+            userViewModel.clearFavKebabPlaces()
+            viewLifecycleOwner.lifecycleScope.launch {
+                Log.i("TEST", userViewModel.getUserSuggestions().toString())
+                userViewModel.getFavKebabsFromApi(userService)
+                userViewModel.getUserSuggestionsFromApi(userService)
+            }
+            val fragmentId = findNavController().currentDestination?.id
+            findNavController().popBackStack(fragmentId!!, true)
+            findNavController().navigate(fragmentId)
+            getData()
         }
         binding.buttonLogout.setOnClickListener {
             sharedPreferencesManager?.clearName()
             sharedPreferencesManager?.clearAuthToken()
             sharedPreferencesManager?.logout()
+            userViewModel.clearFavKebabPlaces()
+            userViewModel.clearSuggestions()
             findNavController().navigate(R.id.action_navigation_user_to_navigation_user_logging)
             userService.logoutUser().enqueue(
                 object : Callback<LogoutResponse> {
@@ -82,7 +104,6 @@ class UserFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             RetrofitClient.setAuthToken("")
-                            userViewModel.clearFavKebabPlaces()
                             Log.i("LOGOUT", "SUCCESS LOGOUT")
                         } else {
                             Log.i("LOGOUT", "Something went wrong ")
@@ -118,7 +139,22 @@ class UserFragment : Fragment() {
 
     private fun getData() {
         val userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        val adapter = AdapterFavoritesClass(userViewModel.getFavKebabPlaces())
+        val adapter = AdapterFavoritesClass(userViewModel.getFavKebabPlaces(), this)
+        val adapterSuggestion = AdapterSuggestionsClass(userViewModel.getUserSuggestions())
         binding.rvFavoriteKebabPlaces.adapter = adapter
+        binding.rvSuggestions.adapter = adapterSuggestion
+    }
+
+    override fun onLogoClick(itemId: Int) {
+        kebabDetailPageViewModel.setKebabId(itemId)
+        Log.i("ADAPTER", kebabDetailPageViewModel.getKebabId().toString())
+        val navController = this.findNavController()
+        val currentDestination = navController.currentDestination?.id
+        if (currentDestination == R.id.navigation_user) {
+            navController.navigate(R.id.action_navigation_user_to_navigation_kebab_detail_page)
+        } else {
+            Log.e("NavigationError", "Invalid navigation state " + navController.currentDestination?.id.toString())
+            navController.navigate(navController.currentDestination?.id!!)
+        }
     }
 }
