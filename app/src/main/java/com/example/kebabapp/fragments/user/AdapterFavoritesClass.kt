@@ -17,6 +17,7 @@ class AdapterFavoritesClass(
         val rvName: TextView = itemView.findViewById(R.id.fav_kebab_name)
         val rvAddress: TextView = itemView.findViewById(R.id.fav_kebab_address)
     }
+
     interface OnLogoClickListener {
         fun onLogoClick(itemId: Int)
     }

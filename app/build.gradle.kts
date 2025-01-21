@@ -92,7 +92,7 @@ dependencies {
     implementation(libs.androidx.fragment.testing)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
-    testImplementation (libs.coroutines.test)
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.androidx.test.rules)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.espresso.core)

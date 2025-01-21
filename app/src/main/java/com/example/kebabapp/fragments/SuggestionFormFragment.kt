@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.kebabapp.UserViewModel
 import com.example.kebabapp.databinding.FragmentSuggestionBinding
 import com.example.kebabapp.utilities.UserService
 import com.google.android.material.snackbar.Snackbar
@@ -23,14 +25,16 @@ class SuggestionFormFragment : Fragment() {
     ): View? {
         binding = FragmentSuggestionBinding.inflate(layoutInflater)
         val userService = RetrofitClient.retrofit.create(UserService::class.java)
+        val userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         val sharedPreferencesManager = context?.let { SharedPreferencesManager(it) }
         val isLogged = sharedPreferencesManager?.checkStatus()
-        val suggestion = binding.suggestionInput.text
         binding.submitButton.setOnClickListener {
+            val suggestion = binding.suggestionInput.text
             if (isLogged == true) {
-                if (suggestion.isNullOrEmpty()) {
+                if (suggestion != null) {
                     viewLifecycleOwner.lifecycleScope.launch {
                         sendSuggestion(suggestion.toString(), userService)
+                        userViewModel.getUserSuggestionsFromApi(userService)
                     }
                 } else {
                     Snackbar.make(
@@ -61,6 +65,7 @@ class SuggestionFormFragment : Fragment() {
             val response = userService.sendSuggestion(input)
             if (response.isSuccessful) {
                 Snackbar.make(binding.root, response.body()?.message.toString(), Snackbar.LENGTH_SHORT).show()
+
                 binding.suggestionInput.text.clear()
             } else {
                 Snackbar.make(binding.root, response.body()?.message.toString(), Snackbar.LENGTH_SHORT).show()

@@ -48,7 +48,7 @@ class KebabDetailPage : Fragment() {
             binding.orderingOptions.text = getStringFromTable(kebabDetailItem?.ordering_options)
             binding.openingHours.text = getOpeningHours(kebabOpeningHours)
         }
-        binding.btnBack.setOnClickListener{
+        binding.btnBack.setOnClickListener {
             val navController = this.findNavController()
             navController.popBackStack()
         }

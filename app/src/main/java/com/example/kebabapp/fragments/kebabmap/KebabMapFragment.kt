@@ -44,7 +44,7 @@ class KebabMapFragment : Fragment() {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(legnicaCity, 14f))
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_basic))
             googleMap.setOnInfoWindowClickListener { marker ->
-                val kebabId = listOfMarkers.entries.find {it.value.title.toString() == marker.title.toString() }?.key
+                val kebabId = listOfMarkers.entries.find { it.value.title.toString() == marker.title.toString() }?.key
                 Log.i("InfoWindow", kebabId.toString())
                 if (kebabId != null) {
                     kebabDetailPageViewModel.setKebabId(kebabId)
@@ -82,15 +82,15 @@ class KebabMapFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
     }
 
-    private fun createListOfMarkers(kebabPlaces: KebabPlaces): MutableMap<Int,MarkerOptions> {
-        val listOfMarkers: MutableMap<Int,MarkerOptions> = mutableMapOf()
+    private fun createListOfMarkers(kebabPlaces: KebabPlaces): MutableMap<Int, MarkerOptions> {
+        val listOfMarkers: MutableMap<Int, MarkerOptions> = mutableMapOf()
         for (item in kebabPlaces) {
             val markerOptions = MarkerOptions()
             markerOptions.title(item.name)
             markerOptions.snippet(item.address)
             markerOptions.position(LatLng(item.latitude.toDouble(), item.longitude.toDouble()))
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromDrawable(R.drawable.ic_kebab_marker)))
-            listOfMarkers.put(item.id,markerOptions)
+            listOfMarkers.put(item.id, markerOptions)
         }
         return listOfMarkers
     }

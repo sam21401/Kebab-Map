@@ -8,7 +8,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.kebabapp.fragments.SuggestionFormFragment
 import junit.framework.TestCase
@@ -18,17 +20,15 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SuggestionFormFragmentTest : TestCase() {
-
     private lateinit var scenario: FragmentScenario<SuggestionFormFragment>
 
-
     @Before
-    fun setup(){
+    fun setup() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_KebabApp)
         scenario.moveToState(Lifecycle.State.STARTED)
     }
-    @Test
 
+    @Test
     fun testInputFieldIsClickable() {
         onView(withId(R.id.suggestionInput))
             .check(matches(isDisplayed()))
